@@ -2,6 +2,8 @@
 from icalendar import Calendar, Event
 from datetime import datetime, timedelta
 
+# TODO: Faire un GUI
+
 # Dictionnaire pour les blocs de temps
 time_periods = {
     1: {"start": "9:15", "end": "10:30"},

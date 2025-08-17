@@ -1,5 +1,7 @@
 import sys
 
+# TODO: Voice synthesis?
+
 # Dictionnaire de l'horaire
 def endofprogram():
     print("\n\n-- Fin du programme --")
