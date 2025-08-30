@@ -71,6 +71,8 @@ try:
 			else:
 				daycount += 1
 			print(f"\nJour {daycount} ───────────────────────")
+			if text_to_speech == True:
+				yapper.yap(f"Jour {daycount}")
 		else:
 			periodcount += 1
 
