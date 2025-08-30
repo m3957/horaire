@@ -47,6 +47,15 @@ try:
 except KeyboardInterrupt:
 	exit(0)
 
+if text_to_speech == True:
+	from yapper import Yapper, PiperSpeaker, PiperVoiceFrance
+
+	speaker = PiperSpeaker(
+		voice=PiperVoiceFrance.TOM  # You can choose any voice listed above
+	)
+
+	yapper = Yapper(speaker=speaker)
+
 print("\nAppuyez sur [bold]󰘳 Ctrl / Cmd + C[/bold] pour quitter.", end='')
 print("\nAppuyez sur [bold]󰌑 Enter[/ bold] pour continuer.")
 
@@ -64,6 +73,10 @@ try:
 			print(f"\nJour {daycount} ───────────────────────")
 		else:
 			periodcount += 1
+
 		print(f"  Période {periodcount}: {schedule[daycount][periodcount - 1]}", end='')
+		if text_to_speech == True:
+			yapper.yap(f"{schedule[daycount][periodcount - 1]}")
+
 except KeyboardInterrupt:
 	exit(0)
