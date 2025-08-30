@@ -19,18 +19,39 @@ daycount = 0
 periodcount = 0
 
 # Change la valeur de daycount pour une valeur choisie
-while daycount not in range(1,9):
+while True:
 	try:
-		print("[bold]Jour d'école pour commencer (1 à 9)[/bold]")
+		print("[bold]Par quel jour d'école voulez-vous commencer (1 - 9)[/bold] ?")
 		daycount = int(input("> "))
+		if 1 <= daycount <= 9:
+			break
+		else:
+			print("\n[bold red]Réponse invalide. Le nombre doit être entre 1 et 9.[/bold red]\n")
 	except ValueError:
-		print("\n[bold red]Réponse invalide.[/bold red]\n")
+		print("\n[bold red]Réponse invalide. Veuillez entrer un nombre.[/bold red]\n")
 	except KeyboardInterrupt:
 		exit(0)
 
+print("\nVoulez-vous [bold]activer la synthèse vocale[/bold] (oui/non) ?")
+try:
+	while True:
+		text_to_speech_input = input("> ").lower()
+		if text_to_speech_input == "oui":
+			text_to_speech = True
+			break
+		elif text_to_speech_input == "non":
+			text_to_speech = False
+			break
+		else:
+			print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
+except KeyboardInterrupt:
+	exit(0)
+
+print("\nAppuyez sur [bold]󰘳 Ctrl / Cmd + C[/bold] pour quitter.", end='')
 print("\nAppuyez sur [bold]󰌑 Enter[/ bold] pour continuer.")
 
 # Change les variables et imprime la bonne entrée depuis le dictionnaire
+print(f"\nJour {daycount} ───────────────────────", end='') # Méthode de paresseux
 try:
 	while True:
 		input()
@@ -40,13 +61,9 @@ try:
 				daycount = 1
 			else:
 				daycount += 1
+			print(f"\nJour {daycount} ───────────────────────")
 		else:
 			periodcount += 1
-		print(f"""
-Jour {daycount} ─────────────────
-Période {periodcount}: {schedule[daycount][periodcount - 1]}
-─────────────────────────
-""")
-# Code pour le Ctrl/Cmd+C
+		print(f"  Période {periodcount}: {schedule[daycount][periodcount - 1]}", end='')
 except KeyboardInterrupt:
 	exit(0)
