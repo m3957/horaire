@@ -1,5 +1,5 @@
 # Horaire
-Programme Python pour avec ces deux fonctions:
+Programme Python avec ces deux fonctions de paresseux:
 
 1. **Générateur de fichier ICS**
 	- Génère un fichier ICS importable dans une application de calendrier avec dedans les périodes scolaires pour la semaine.
