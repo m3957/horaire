@@ -1,6 +1,8 @@
-name: Build executables (AI made file)
+name: Build executables
 on:
   push:
+    paths:
+      - "**.py"
 
 jobs:
   build:
