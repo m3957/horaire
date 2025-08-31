@@ -19,6 +19,18 @@ with open("horaire.txt", "r", encoding="utf-8") as f:
 daycount = 0
 periodcount = 0
 
+# Avertissement
+try:
+	print("""
+[bold red] Ce programme ne vient avec aucune responsabilité. L'horaire présent dans le[/bold red]
+[bold red]programme peut contenir des erreurs non présentes dans la version officielle.[/bold red]
+
+Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
+	""")
+	input()
+except KeyboardInterrupt:
+	exit(0)
+
 # Change la valeur de daycount pour une valeur choisie
 while True:
 	try:
@@ -58,7 +70,7 @@ if text_to_speech == True:
 	yapper = Yapper(speaker=speaker)
 
 print("\nAppuyez sur [bold]󰘳 Ctrl / Cmd + C[/bold] pour quitter.", end='')
-print("\nAppuyez sur [bold]󰌑 Enter[/ bold] pour continuer.")
+print("\nAppuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.")
 
 # Change les variables et imprime la bonne entrée depuis le dictionnaire
 print(f"\nJour {daycount} ───────────────────────", end='') # Méthode de paresseux
