@@ -1,7 +1,43 @@
 from rich import print
+from tkinter import filedialog
 
 # Dictionnaire de l'horaire
 schedule = {}
+
+# Importe l'horaire du fichier texte vers le programme
+try:
+	# Message d'erreur pour la sélection de fichiers, pas me répéter
+	message_erreur_fichier = """[bold red] Veuillez sélectionner le bon fichier. Celui-ci devrait avoir
+neuf lignes, chacune commençant par Jour 1, 2, etc. comme ceci:[/bold red]
+─ [bold]horaire.txt[/bold] ─────────────────────────────────────
+Jour 1: Période 1, Période 2, Période 3, Période 4
+Jour 2: Période 1, Période 2, Période 3, Période 4
+...
+Jour 8: Période 1, Période 2, Période 3, Période 4
+Jour 9: Période 1, Période 2, Période 3, Période 4
+───────────────────────────────────────────────────"""
+
+	print("""
+[bold]Veuillez sélectionner le fichier d'horaire.[/bold]
+Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
+""", end='')
+	input()
+
+	nom_fichier = filedialog.askopenfilename() # Ouvre le sélecteur de fichiers Tkinter
+
+	if nom_fichier.endswith('.txt'):
+		texte = open(nom_fichier)
+		if texte.read(7) == "Jour 1:":
+			pass
+		else:
+			print(message_erreur_fichier)
+			exit(0)
+	else:
+		print(message_erreur_fichier)
+		exit(0)
+except KeyboardInterrupt:
+	exit(0)
+
 with open("horaire.txt", "r", encoding="utf-8") as f:
 	for line in f:
 		line = line.strip()
@@ -21,9 +57,8 @@ periodcount = 0
 
 # Avertissement
 try:
-	print("""
-[bold red] Ce programme ne vient avec aucune responsabilité. L'horaire présent dans le[/bold red]
-[bold red]programme peut contenir des erreurs non présentes dans la version officielle.[/bold red]
+	print("""[bold red] L'horaire choisi ne vient avec aucune responsabilité. Celui-ci[/bold red]
+[bold red]peut contenir des erreurs non présentes dans la version papier.[/bold red]
 
 Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 	""")
@@ -71,6 +106,8 @@ if text_to_speech == True:
 
 print("\nAppuyez sur [bold]󰘳 Ctrl / Cmd + C[/bold] pour quitter.", end='')
 print("\nAppuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.")
+
+input()
 
 # Change les variables et imprime la bonne entrée depuis le dictionnaire
 print(f"\nJour {daycount} ───────────────────────", end='') # Méthode de paresseux
