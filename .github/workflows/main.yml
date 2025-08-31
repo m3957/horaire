@@ -1,24 +1,45 @@
-name: Package exe with PyInstaller - Windows
-
+name: Build executables (AI made file)
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., v1.0.0)"
+        required: true
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - name: PyInstaller Windows
-      uses: JackMcKew/pyinstaller-action-windows@python3-10-pyinstaller-5-3
-      with:
-        path: src
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: my-exe
-        path: src/dist/windows # or path/to/artifact
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build executable
+        run: pyinstaller --onefile app.py
+
+      - name: Rename executable
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            mv dist/app.exe dist/app-windows.exe
+          elif [[ "$RUNNER_OS" == "Linux" ]]; then
+            mv dist/app dist/app-linux
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            mv dist/app dist/app-macos
+          fi
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.os }}
+          path: dist/*
