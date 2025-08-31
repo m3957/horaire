@@ -12,18 +12,20 @@ time_periods = {
 	4: {"start": "14:55", "end": "16:10"}
 }
 
-# Dictionnaire pour l'horaire
-schedule = {
-	1: ["Période", "Période", "Période", "Période"],
-	2: ["Période", "Période", "Période", "Période"],
-	3: ["Période", "Période", "Période", "Période"],
-	4: ["Période", "Période", "Période", "Période"],
-	5: ["Période", "Période", "Période", "Période"],
-	6: ["Période", "Période", "Période", "Période"],
-	7: ["Période", "Période", "Période", "Période"],
-	8: ["Période", "Période", "Période", "Période"],
-	9: ["Période", "Période", "Période", "Période"]
-}
+# Dictionnaire de l'horaire
+schedule = {}
+with open("horaire.txt", "r", encoding="utf-8") as f:
+	for line in f:
+		line = line.strip()
+		if not line:
+			continue
+		# Sépare à la colonne pour séparer le jour et les périodes
+		day_part, periods_part = line.split(":", 1)
+		# Extrait le chiffre du jour
+		day_number = int(day_part.replace("Jour", "").strip())
+		# Sépare les périodes et enlève les espaces
+		periods = [p.strip() for p in periods_part.split(",")]
+		schedule[day_number] = periods
 
 # Informations
 print("Le programme va créer un fichier ICS basé sur l'horaire spécifié dans le code.\n")
