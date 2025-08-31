@@ -1,5 +1,6 @@
 from rich import print
 from tkinter import filedialog
+import random
 
 # Dictionnaire de l'horaire
 schedule = {}
@@ -23,7 +24,7 @@ Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 """, end='')
 	input()
 
-	nom_fichier = filedialog.askopenfilename() # Ouvre le sélecteur de fichiers Tkinter
+	nom_fichier = filedialog.askopenfilename(filetypes=[("Fichiers textes", "*.txt")]) # Ouvre le sélecteur de fichiers Tkinter
 
 	if nom_fichier.endswith('.txt'):
 		texte = open(nom_fichier)
@@ -36,6 +37,10 @@ Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 		print(message_erreur_fichier)
 		exit(0)
 except KeyboardInterrupt:
+	exit(0)
+except:
+	# User clicked cancel in the file dialog or another error occurred
+	print("[bold yellow]Sélection de fichier annulée.[/bold yellow]")
 	exit(0)
 
 with open("horaire.txt", "r", encoding="utf-8") as f:
@@ -80,22 +85,31 @@ while True:
 	except KeyboardInterrupt:
 		exit(0)
 
-print("\nVoulez-vous [bold]activer la synthèse vocale[/bold] (oui/non) ?")
+# Text to speech:
+# 1: activé
+# 2: désactivé
+# 3: aléatoire activé
+# 4: aléatoire désactivé
 try:
 	while True:
+		print("\nVoulez-vous [bold]activer la synthèse vocale[/bold] (oui/non) ?")
 		text_to_speech_input = input("> ").lower()
 		if text_to_speech_input == "oui":
-			text_to_speech = True
+			text_to_speech = 1
 			break
 		elif text_to_speech_input == "non":
-			text_to_speech = False
+			text_to_speech = 2
+			break
+		if text_to_speech_input == "peut-être":
+			print("\nTu n'es pas sûr? Bon, je continue, alors.")
+			text_to_speech = 3
 			break
 		else:
-			print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
+			print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]")
 except KeyboardInterrupt:
 	exit(0)
 
-if text_to_speech == True:
+if text_to_speech == 1 or text_to_speech == 3:
 	from yapper import Yapper, PiperSpeaker, PiperVoiceFrance
 
 	speaker = PiperSpeaker(
@@ -104,15 +118,31 @@ if text_to_speech == True:
 
 	yapper = Yapper(speaker=speaker)
 
+	if text_to_speech == 3:
+		yapper.yap(f"T'es pas sûr? Bon, je continue alors.")
+
 print("\nAppuyez sur [bold]󰘳 Ctrl / Cmd + C[/bold] pour quitter.", end='')
 print("\nAppuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.")
 
-input()
+try:
+	input()
+except KeyboardInterrupt:
+	print("[bold yellow]Programme quitté.[/bold yellow]")
+	exit(0)
+
 
 # Change les variables et imprime la bonne entrée depuis le dictionnaire
-print(f"\nJour {daycount} ───────────────────────", end='') # Méthode de paresseux
+
+# Méthode de paresseux
+print(f"\nJour {daycount} ───────────────────────", end='')
+if text_to_speech == 1:
+	yapper.yap(f"Jour {daycount}")
+
 try:
 	while True:
+		if text_to_speech >= 3:
+			text_to_speech = random.randint(3, 4)
+
 		input()
 		if periodcount >= 4:
 			periodcount = 1
@@ -121,13 +151,13 @@ try:
 			else:
 				daycount += 1
 			print(f"\nJour {daycount} ───────────────────────")
-			if text_to_speech == True:
+			if text_to_speech == 1 or text_to_speech == 3:
 				yapper.yap(f"Jour {daycount}")
 		else:
 			periodcount += 1
 
 		print(f"  Période {periodcount}: {schedule[daycount][periodcount - 1]}", end='')
-		if text_to_speech == True:
+		if text_to_speech == 1 or text_to_speech == 3:
 			yapper.yap(f"{schedule[daycount][periodcount - 1]}")
 
 except KeyboardInterrupt:
