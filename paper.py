@@ -148,7 +148,6 @@ def affichage_periodes(daycount, text_to_speech):
 	# Variables de compteur
 	periodcount = 0
 
-	# TODO: régler loop weird
 	print(f"\nJour {daycount} ───────────────────────", end='')
 	if text_to_speech == 1:
 		yapper.yap(f"Jour {daycount}")
@@ -158,18 +157,20 @@ def affichage_periodes(daycount, text_to_speech):
 			if text_to_speech >= 3:
 				text_to_speech = random.randint(3, 4)
 
-			input()
+			#input()
 			if periodcount >= 4:
 				periodcount = 1
 				if daycount >= 9:
 					daycount = 1
 				else:
 					daycount += 1
-				print(f"\nJour {daycount} ───────────────────────")
+				print(f"\n\nJour {daycount} ───────────────────────", end='')
 				if text_to_speech == 1 or text_to_speech == 3:
 					yapper.yap(f"Jour {daycount}")
 			else:
 				periodcount += 1
+
+			input()
 
 			print(f"  Période {periodcount}: {schedule[daycount][periodcount - 1]}", end='')
 			if text_to_speech == 1 or text_to_speech == 3:
