@@ -160,7 +160,7 @@ def continuation_progr_av_stage_final():
 	try:
 		input()
 	except KeyboardInterrupt:
-		print("[bold yellow]Programme quitté.[/bold yellow]")
+		print("\n[bold yellow]Programme quitté.[/bold yellow]")
 		exit(0)
 
 def affichage_periodes(schedule, daycount, text_to_speech):
