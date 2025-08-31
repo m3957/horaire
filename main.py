@@ -65,6 +65,7 @@ for i in range(1, 5+1):
 	daycount = daycount + timedelta(days=1)
 
 # Écrit le contenu dans un fichier ics
+# TODO: mettre le fichier dans les téléchargements
 with open('calendar.ics', 'wb') as f:
 	f.write(cal.to_ical())
 
