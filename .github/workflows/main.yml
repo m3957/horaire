@@ -30,16 +30,16 @@ jobs:
         run: pip install pyinstaller
 
       - name: Création de l'exécutable
-        run: pyinstaller --onefile paper.py
+        run: pyinstaller --onefile main.py
 
       - name: Renommage de l'exécutable
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            mv dist/paper.exe dist/horaire-papier-win.exe
+            mv dist/main.exe dist/horaire-papier-win.exe
           elif [[ "$RUNNER_OS" == "Linux" ]]; then
-            mv dist/paper dist/horaire-papier-linux
+            mv dist/main dist/horaire-papier-linux
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            mv dist/paper dist/horaire-papier-macos
+            mv dist/main dist/horaire-papier-macos
           fi
         shell: bash
 

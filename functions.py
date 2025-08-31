@@ -1,8 +1,7 @@
-# Importations
-from yapper import Yapper, PiperSpeaker, PiperVoiceFrance
 from rich import print
-import random
+from yapper import Yapper, PiperSpeaker, PiperVoiceFrance
 
+# --- Fonctions globales, ne changent pas entre les ICS et papier -----------------------------------------------------
 def selecteur_fichiers():
 	# Ouvre un dialogue de sélection de fichiers avec Tkinter pour que
 	# l'utilisateur sélectionne un fichier texte contenant l'horaire voulu.
@@ -85,7 +84,7 @@ def avertissement_responsabilite():
 peut contenir des erreurs non présentes dans la version papier.[/bold yellow]
 
 Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
-	""")
+""", end='')
 		input()
 	except KeyboardInterrupt:
 		exit(0)
@@ -100,7 +99,6 @@ def option_jour_ecole_commencement():
 			daycount = int(input("> "))
 			if 1 <= daycount <= 9:
 				return daycount
-				break
 			else:
 				print("\n[bold red]Réponse invalide. Le nombre doit être entre 1 et 9.[/bold red]\n")
 		except ValueError:
@@ -108,6 +106,95 @@ def option_jour_ecole_commencement():
 		except KeyboardInterrupt:
 			exit(0)
 
+# --- Fonctions spécifiques à ICS -------------------------------------------------------------------------------------
+
+# TODO: tout commenter
+
+def information_creation_fichier_ics():
+	print("Le programme va créer un fichier ICS basé sur l'horaire spécifié.")
+
+def information_fichier_ics_cree():
+	print("""\n[bold green] Un fichier ICS a été enregistré. Vous pouvez l'importer
+dans votre application de calendrier existante.[bold green]""")
+
+
+def option_date_commencement_evenements():
+	# Modifie la valeur de date de commencement pour une choisie par l'utilisateur,
+	# pour commencer la création des événements dans le fichier ICS par cette date
+
+	from datetime import datetime
+
+	while True:
+		try:
+			print("\n[bold]Par quelle date vos événements vont-ils commencer (YYYY-MM-DD)[/bold] ?")
+			daycount = datetime.strptime(input("> "), "%Y-%m-%d").date()
+			return daycount
+		except ValueError:
+			print("\n[bold red]Réponse invalide. Veuillez entrer une date dans ce format: YYYY-MM-DD.[/bold red]\n")
+		except KeyboardInterrupt:
+			exit(0)
+
+def option_conges_semaine():
+	while True:
+		try:
+			print("\n[bold]Est-ce qu'il y a des congés/pédagogiques dans la semaine[/bold] (oui/non) ?")
+			conges_pedagos = input("> ")
+
+			if conges_pedagos == "oui":
+				# Convertit en integer - enlève les espaces - pour chaque x dans ex.: 1,2,3,4,5 - sépare
+				# les valeurs dans une liste, supprime les virgules
+
+				# TODO: formattage, détection de stupidité
+
+				print("\n[bold]Quels sont les jours d'école[/bold] (ex.: 1,2,3,4 pour un congé vendredi) ?")
+				workingdays = [int(x.strip()) for x in input("> ").split(',')]
+
+				break
+			elif conges_pedagos == "non":
+				workingdays = [1,2,3,4,5]
+				break
+			else:
+				print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
+		except ValueError:
+			print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
+		except KeyboardInterrupt:
+			exit(0)
+
+	return workingdays
+
+def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, daycount):
+	from icalendar import Calendar, Event
+	from datetime import datetime, timedelta
+
+	# Définit cal - variable sur laquelle on va travailler
+	cal = Calendar()
+
+	for i in range(1, 5+1):
+		if i in workingdays:
+			for index, eventcounter in enumerate(schedule[scheduledaycount], start=1):
+				e = Event() # Définit e
+				start_time = datetime.strptime(time_periods[index]["start"], "%H:%M").time() # Note la date de début
+				end_time = datetime.strptime(time_periods[index]["end"], "%H:%M").time() # Note la date de fin
+				e.add('summary', schedule[scheduledaycount][index-1]) # Ajoute le nom de l'événement
+				e.add('dtstart', datetime.combine(daycount, start_time)) # Ajoute la date de début
+				e.add('dtend', datetime.combine(daycount, end_time)) # Ajoute la date de fin
+				cal.add_component(e) # FIN
+
+			# Compteur de journées d'école
+			if scheduledaycount >= 9:
+				scheduledaycount = 1
+			else:
+				scheduledaycount = scheduledaycount + 1
+
+	# Ajoute 1 au compteur de jour réels
+	daycount = daycount + timedelta(days=1)
+
+	# Écrit le contenu dans un fichier ics
+	# TODO: mettre le fichier dans les téléchargements
+	with open('calendar.ics', 'wb') as f:
+		f.write(cal.to_ical())
+
+# --- Fonctions spécifiques à papier ----------------------------------------------------------------------------------
 def option_text_to_speech():
 	# Modifie la valeur text_to_speech pour une choisie par l'utilisateur,
 	# pour avoir ou non de la synthèse vocale dans l'impression des jours
@@ -164,6 +251,7 @@ def continuation_progr_av_stage_final():
 		exit(0)
 
 def affichage_periodes(schedule, daycount, text_to_speech):
+	import random
 	periodcount = 0 # Variable de compteur
 
 	# Méthode de paresseux
@@ -210,22 +298,3 @@ def affichage_periodes(schedule, daycount, text_to_speech):
 
 	except KeyboardInterrupt:
 		exit(0)
-
-
-# Programme papier.py
-def main():
-	nom_fichier = selecteur_fichiers()						# Affiche le sélecteur de fichiers
-	schedule = convert_txt_file_to_schedule(nom_fichier)	# Convertit le fichier txt sélectionné en dictionnaire
-	avertissement_responsabilite()							# Imprime l'avertissement de responsabilité
-	daycount = option_jour_ecole_commencement()				# Option: demande pour le jour de commencement
-	text_to_speech = option_text_to_speech()				# Option: demande pour la synthèse vocale
-
-	if text_to_speech == 1 or text_to_speech == 3:
-		# Si la synthèse vocale est activée, l'initaliser
-		initialisation_text_to_speech(text_to_speech)
-
-	continuation_progr_av_stage_final()						# Imprime l'information avant de commencer la boucle
-	affichage_periodes(schedule, daycount, text_to_speech)	# Affichage des périodes, ex.: Jour 1, Période, etc.
-
-if __name__ == "__main__":
-	main()

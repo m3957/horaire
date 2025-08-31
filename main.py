@@ -1,76 +1,70 @@
-# Importations
-from icalendar import Calendar, Event
-from datetime import datetime, timedelta
+from rich import print
+import functions
 
-# TODO: Faire un GUI
+# Programme de générateur de fichier ICS
+def generateur_de_fichier_ics():
+	# Dictionnaire pour les blocs de temps
+	time_periods = {
+		1: {"start": "9:15", "end": "10:30"},
+		2: {"start": "10:50", "end": "12:05"},
+		3: {"start": "13:20", "end": "14:35"},
+		4: {"start": "14:55", "end": "16:10"}
+	}
 
-# Dictionnaire pour les blocs de temps
-time_periods = {
-	1: {"start": "9:15", "end": "10:30"},
-	2: {"start": "10:50", "end": "12:05"},
-	3: {"start": "13:20", "end": "14:35"},
-	4: {"start": "14:55", "end": "16:10"}
-}
+	nom_fichier = functions.selecteur_fichiers()							# Affiche le sélecteur de fichiers
+	schedule = functions.convert_txt_file_to_schedule(nom_fichier)			# Convertit le fichier txt sélectionné en dictionnaire
 
-# Dictionnaire de l'horaire
-schedule = {}
-with open("horaire.txt", "r", encoding="utf-8") as f:
-	for line in f:
-		line = line.strip()
-		if not line:
-			continue
-		# Sépare à la colonne pour séparer le jour et les périodes
-		day_part, periods_part = line.split(":", 1)
-		# Extrait le chiffre du jour
-		day_number = int(day_part.replace("Jour", "").strip())
-		# Sépare les périodes et enlève les espaces
-		periods = [p.strip() for p in periods_part.split(",")]
-		schedule[day_number] = periods
+	functions.avertissement_responsabilite()								# Imprime l'avertissement de responsabilité
 
-# Informations
-print("Le programme va créer un fichier ICS basé sur l'horaire spécifié dans le code.\n")
+	scheduledaycount = functions.option_jour_ecole_commencement()			# Option: jour d'école de commencement (1 - 9)
+	daycount = functions.option_date_commencement_evenements()				# Option: date de commencement des événements
+	workingdays = functions.option_conges_semaine()							# Option: congés/pédagogiques dans la semaine
 
-# Met les variables
-scheduledaycount = int(input("À quel jour voulez-vous commencer? (1-9)\n> "))
-daycount = datetime.strptime(input("Entre la date de début pour l'horaire (YYYY-MM-DD)\n> "), "%Y-%m-%d").date()
+	functions.information_creation_fichier_ics()							# Informe l'utilisateur que le fichier va être créé
 
-if input("Y a t'il des pédagos/congés dans la semaine? (oui/non)\n> ") == "oui":
-	workingdays = [int(x.strip()) for x in input("Quels sont les jours de travail? (ex.: 1,2,3,4,5)\n> ").split(',')]
-	# Convertit en integer - enlève les espaces - pour chaque x dans ex.: 1,2,3,4,5 - sépare
-	# les valeurs dans une liste, supprime les virgules
-else:
-	workingdays = [1,2,3,4,5]
+	functions.generate_ics_file(workingdays, schedule, scheduledaycount,	# Génère un fichier ICS
+								time_periods, daycount)
 
-# Définit cal - variable sur laquelle on va travailler
-cal = Calendar()
+	functions.information_fichier_ics_cree()								# Informe l'utilisateur que le fichier a été créé
 
-for i in range(1, 5+1):
-	if i in workingdays:
-		for index, eventcounter in enumerate(schedule[scheduledaycount], start=1):
-			e = Event() # Définit e
-			start_time = datetime.strptime(time_periods[index]["start"], "%H:%M").time() # Note la date de début
-			end_time = datetime.strptime(time_periods[index]["end"], "%H:%M").time() # Note la date de fin
-			e.add('summary', schedule[scheduledaycount][index-1]) # Ajoute le nom de l'événement
-			e.add('dtstart', datetime.combine(daycount, start_time)) # Ajoute la date de début
-			e.add('dtend', datetime.combine(daycount, end_time)) # Ajoute la date de fin
-			cal.add_component(e) # FIN
+# Programme papier.py
+def papier():
+	nom_fichier = functions.selecteur_fichiers()						# Affiche le sélecteur de fichiers
+	schedule = functions.convert_txt_file_to_schedule(nom_fichier)		# Convertit le fichier txt sélectionné en dictionnaire
+	functions.avertissement_responsabilite()							# Imprime l'avertissement de responsabilité
+	daycount = functions.option_jour_ecole_commencement()				# Option: demande pour le jour de commencement
+	text_to_speech = functions.option_text_to_speech()					# Option: demande pour la synthèse vocale
 
-		# Compteur de journées d'école
-		if scheduledaycount >= 9:
-			scheduledaycount = 1
-		else:
-			scheduledaycount = scheduledaycount + 1
+	if text_to_speech == 1 or text_to_speech == 3:						# Si la synthèse vocale est activée, l'initaliser
+		functions.initialisation_text_to_speech(text_to_speech)
 
-	# Ajoute 1 au compteur de jour réels
-	daycount = daycount + timedelta(days=1)
+	functions.continuation_progr_av_stage_final()						# Imprime l'information avant de commencer la boucle
+	functions.affichage_periodes(schedule, daycount, text_to_speech)	# Affichage des périodes, ex.: Jour 1, Période, etc.
 
-# Écrit le contenu dans un fichier ics
-# TODO: mettre le fichier dans les téléchargements
-with open('calendar.ics', 'wb') as f:
-	f.write(cal.to_ical())
+def option_menu_principal():
+	while True:
+		try:
+			print("""[bold]Programme d'horaire scolaire[/bold]
+Veuillez sélectionner une option (1 ou 2):
 
+1. Générateur de fichier ICS
+     Génère un fichier ICS importable dans une application de
+     calendrier avec dedans les périodes scolaires pour la semaine.
+2. Copie de périodes dans l'agenda papier
+     Affiche la prochaine période à écrire dans l'agenda et l'énonce
+     au besoin pour faciliter la copie de celles-ci dans l'agenda.
+""")
+			selection_utilisateur_menu = int(input("> "))
+			if selection_utilisateur_menu == 1:
+				generateur_de_fichier_ics()
+				exit(0)
+			elif selection_utilisateur_menu == 2:
+				papier()
+				exit(0)
+			else:
+				print("\n[bold red]Réponse invalide. Veuillez répondre par 1 ou 2.[/bold red]\n")
+		except KeyboardInterrupt:
+			exit(0)
 
-# Informations
-print("""
-Un fichier ICS a été enregistré. Vous pouvez l'importer
-dans votre application de calendrier existante.""")
+if __name__ == "__main__":
+	option_menu_principal()
