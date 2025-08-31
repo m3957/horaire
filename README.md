@@ -8,12 +8,7 @@ Programme Python pour...
 Exécuter ``python3 main.py`` pour le générateur ICS et ``python3 paper.py`` pour l'agenda papier.
 
 ### Dépendences
-Installer les dépendences avec cette commande:
+L'installation des dépendances du projet se fait avec...
 ```bash
-pip3 install icalendar datetime rich yapper-tts
+pip install -r requirements.txt
 ```
-
-- icalendar
-- datetime
-- rich
-- yapper-tts
