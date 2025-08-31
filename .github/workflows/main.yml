@@ -29,11 +29,11 @@ jobs:
       - name: Rename executable
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            mv dist/app.exe dist/horaire-papier-win.exe
+            mv dist/paper.exe dist/horaire-papier-win.exe
           elif [[ "$RUNNER_OS" == "Linux" ]]; then
-            mv dist/app dist/horaire-papier-linux
+            mv dist/paper dist/horaire-papier-linux
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            mv dist/app dist/horaire-papier-macos
+            mv dist/paper dist/horaire-papier-macos
           fi
         shell: bash
 
