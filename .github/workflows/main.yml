@@ -9,34 +9,29 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+
     runs-on: ${{ matrix.os }}
+
     steps:
-      - name: Checkout code
+      - name: Checkout du code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Configuration de Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.x"
+          cache: "pip"
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
+      - name: Installation des dépendances
         run: pip install -r requirements.txt
 
-      - name: Install PyInstaller
+      - name: Installation de PyInstaller
         run: pip install pyinstaller
 
-      - name: Build executable
+      - name: Création de l'exécutable
         run: pyinstaller --onefile paper.py
 
-      - name: Rename executable
+      - name: Renommage de l'exécutable
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             mv dist/paper.exe dist/horaire-papier-win.exe
@@ -47,7 +42,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Upload artifact
+      - name: Téléversement de l'artéfact
         uses: actions/upload-artifact@v4
         with:
           name: app-${{ matrix.os }}
