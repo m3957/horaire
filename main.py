@@ -1,4 +1,5 @@
 from rich import print
+from platform import system
 import functions
 
 # Programme de générateur de fichier ICS
@@ -33,7 +34,12 @@ def papier():
 	schedule = functions.convert_txt_file_to_schedule(nom_fichier)		# Convertit le fichier txt sélectionné en dictionnaire
 	functions.avertissement_responsabilite()							# Imprime l'avertissement de responsabilité
 	daycount = functions.option_jour_ecole_commencement()				# Option: demande pour le jour de commencement
-	text_to_speech = functions.option_text_to_speech()					# Option: demande pour la synthèse vocale
+
+	# TODO: faire que la synthèse vocale fonctionne partout
+	if system() == "Linux":
+		text_to_speech = functions.option_text_to_speech()				# Option: demande pour la synthèse vocale (Linux seulement)
+	else:
+		text_to_speech = 2												# Désactive la synthèse vocale si le système n'est pas supporté
 
 	if text_to_speech == 1 or text_to_speech == 3:						# Si la synthèse vocale est activée, l'initaliser
 		functions.initialisation_text_to_speech(text_to_speech)
