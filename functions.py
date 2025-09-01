@@ -241,7 +241,7 @@ def continuation_progr_av_stage_final():
 	# Petit message informant les utilisateurs comment quitter
 	# le programme au besoin, puisqu'il va être dans une boucle infinie
 
-	print("\nAppuyez sur [bold]󰘳 Ctrl / Cmd + C[/bold] pour quitter.", end='')
+	print("\nAppuyez sur [bold]󰘳 Ctrl + C[/bold] pour quitter.", end='')
 	print("\nAppuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.")
 
 	try:
