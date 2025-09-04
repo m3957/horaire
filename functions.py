@@ -109,6 +109,8 @@ def option_jour_ecole_commencement():
 # --- Fonctions spécifiques à ICS -------------------------------------------------------------------------------------
 
 # TODO: tout commenter
+# BUG:  régler bug logique loop
+# TODO: ajouter truc après Ctrl+C ex.: "tu as écris 52 périodes, wooh!"
 
 def information_creation_fichier_ics():
 	print("Le programme va créer un fichier ICS basé sur l'horaire spécifié.")
