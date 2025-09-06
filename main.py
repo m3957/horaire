@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from rich import print
 from platform import system
 import functions
@@ -5,6 +7,7 @@ import functions
 # Programme de générateur de fichier ICS
 def generateur_de_fichier_ics():
 	# Dictionnaire pour les blocs de temps
+	# TODO: déplacer ça dans un fichier txt
 	time_periods = {
 		1: {"start": "9:15", "end": "10:30"},
 		2: {"start": "10:50", "end": "12:05"},
