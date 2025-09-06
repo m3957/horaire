@@ -188,8 +188,8 @@ def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, day
 			else:
 				scheduledaycount = scheduledaycount + 1
 
-	# Ajoute 1 au compteur de jour réels
-	daycount = daycount + timedelta(days=1)
+		# Ajoute 1 au compteur de jour réels
+		daycount = daycount + timedelta(days=1)
 
 	# Écrit le contenu dans un fichier ics
 	# TODO: mettre le fichier dans les téléchargements
