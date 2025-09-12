@@ -35,11 +35,11 @@ jobs:
       - name: Renommage de l'exécutable
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            mv dist/main.exe dist/horaire-papier-win.exe
+            mv dist/main.exe dist/Horaire_Windows.exe
           elif [[ "$RUNNER_OS" == "Linux" ]]; then
-            mv dist/main dist/horaire-papier-linux
+            mv dist/main dist/horaire-linux
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            mv dist/main dist/horaire-papier-macos
+            mv dist/main dist/horaire-macos
           fi
         shell: bash
 
