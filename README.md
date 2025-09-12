@@ -2,38 +2,51 @@
 Programme Python avec ces deux fonctions de paresseux:
 
 1. **Générateur de fichier ICS**
-	- Génère un fichier ICS importable dans une application de calendrier avec dedans les périodes scolaires pour la semaine.
+	- Génère un fichier ICS importable dans une application de calendrier avec à l'intérieur les périodes pour la semaine.
+
 2. **Copie de périodes dans l'agenda papier**
-	- Affiche la prochaine période à écrire dans l'agenda et l'énonce au besoin pour faciliter la copie de celles-ci dans l'agenda.
+	- Liste les périodes une à la fois pour les recopier dans l'agenda.
 
-## Usage
-Le programme peut être exécuté à partir du fichier Python ou depuis le fichier .exe fait par Github Actions.
+```
+Jour 1 ───────────────────────
+  Période 1: Mathématiques
+  Période 2: Français
+  Période 3: Mathématiques
+  Période 4: Français
 
-### À partir du fichier
+Jour 2 ───────────────────────
+  Période 1: MATHÉMATIQUES!
+```
+
+## Installation
+Le programme peut être téléchargé depuis [la page Releases](https://github.com/m3957/horaire/releases/latest) ou être exécuté manuellement.
+
+### À partir de la page Releases
+1. Télécharger le fichier dans le bas de [la page Releases](https://github.com/m3957/horaire/releases/latest)
+2. Ouvrir le programme
+3. Ignorer les plaintes de l'anti-virus
+	- Il y a des bonnes chances que Windows chiale que le programme *pourrait* être un virus. Vu que le programme n'est pas fait par une grosse entreprise, ça se plaint.
+4. Cliquez sur un texte "En savoir plus".
+5. Un bouton devrait apparaître permettant d'exécuter le programme quand même.
+6. Cliquez sur le bouton "Exécuter quand même", priant pour ne pas avoir un virus (lol)
+
+### À partir du fichier Python
+1. Installer [Python](https://www.python.org/downloads/) et [git](https://git-scm.com/downloads)
+2. Depuis un terminal, exécuter ces commandes
+
 ```bash
-# Clone le projet
-git clone https://github.com/m3957/Horaire
+# Cloner le projet
+git clone https://github.com/m3957/horaire
 
-# Installe les dépendances
+# Ouvrir le répertoire du projet
+cd horaire
+
+# Installer les dépendances
 pip install -r requirements.txt
 
-# Exécute le programme
+# Exécuter le programme
 python3 main.py
 ```
 
-### À partir de Github Actions
-Github Actions compile automatiquement le programme dans un fichier exécutable pour Windows et Linux.
-Ceux-ci peuvent être téléchargés depuis la section Releases dans la colonne droite.
-
-## Compilation
-```bash
-# Installe les dépendances si pas déjà fait
-pip install -r requirements.txt
-
-# Installe pyinstaller, compile et exécute le programme
-pip install pyinstaller
-pyinstaller --onefile main.py
-
-chmod +x dist/main
-./dist/main
-```
+## Usage
+Pour utiliser le programme, l'ouvrir en double-cliquant dessus ou en exécutant ``./horaire-macos`` ou ``./horaire-linux``.
