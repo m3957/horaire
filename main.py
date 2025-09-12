@@ -15,6 +15,7 @@ def generateur_de_fichier_ics():
 		4: {"start": "14:55", "end": "16:10"}
 	}
 
+	functions.option_creation_fichier_txt()									# Création du fichier horaire.txt
 	nom_fichier = functions.selecteur_fichiers()							# Affiche le sélecteur de fichiers
 	schedule = functions.convert_txt_file_to_schedule(nom_fichier)			# Convertit le fichier txt sélectionné en dictionnaire
 
@@ -33,22 +34,23 @@ def generateur_de_fichier_ics():
 
 # Programme papier.py
 def papier():
-	nom_fichier = functions.selecteur_fichiers()						# Affiche le sélecteur de fichiers
-	schedule = functions.convert_txt_file_to_schedule(nom_fichier)		# Convertit le fichier txt sélectionné en dictionnaire
-	functions.avertissement_responsabilite()							# Imprime l'avertissement de responsabilité
-	daycount = functions.option_jour_ecole_commencement()				# Option: demande pour le jour de commencement
+	functions.option_creation_fichier_txt()									# Création du fichier horaire.txt
+	nom_fichier = functions.selecteur_fichiers()							# Affiche le sélecteur de fichiers
+	schedule = functions.convert_txt_file_to_schedule(nom_fichier)			# Convertit le fichier txt sélectionné en dictionnaire
+	functions.avertissement_responsabilite()								# Imprime l'avertissement de responsabilité
+	daycount = functions.option_jour_ecole_commencement()					# Option: demande pour le jour de commencement
 
 	# TODO: faire que la synthèse vocale fonctionne partout
 	if system() == "Linux":
-		text_to_speech = functions.option_text_to_speech()				# Option: demande pour la synthèse vocale (Linux seulement)
+		text_to_speech = functions.option_text_to_speech()					# Option: demande pour la synthèse vocale (Linux seulement)
 	else:
-		text_to_speech = 2												# Désactive la synthèse vocale si le système n'est pas supporté
+		text_to_speech = 2													# Désactive la synthèse vocale si le système n'est pas supporté
 
-	if text_to_speech == 1 or text_to_speech == 3:						# Si la synthèse vocale est activée, l'initaliser
+	if text_to_speech == 1 or text_to_speech == 3:							# Si la synthèse vocale est activée, l'initaliser
 		functions.initialisation_text_to_speech(text_to_speech)
 
-	functions.continuation_progr_av_stage_final()						# Imprime l'information avant de commencer la boucle
-	functions.affichage_periodes(schedule, daycount, text_to_speech)	# Affichage des périodes, ex.: Jour 1, Période, etc.
+	functions.continuation_progr_av_stage_final()							# Imprime l'information avant de commencer la boucle
+	functions.affichage_periodes(schedule, daycount, text_to_speech)		# Affichage des périodes, ex.: Jour 1, Période, etc.
 
 def option_menu_principal():
 	while True:

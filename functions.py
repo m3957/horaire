@@ -106,6 +106,42 @@ def option_jour_ecole_commencement():
 		except KeyboardInterrupt:
 			exit(0)
 
+def option_creation_fichier_txt():
+	# Crée un fichier texte modèle utilisé pour le reste,
+	# du programme sous la demande de l'utilisateur.
+
+	import os
+
+	# Vérifie si un fichier nommé "horaire.txt" existe déjà dans le répertoire de travail
+	if os.path.exists("horaire.txt"):
+		print("[bold grey30]Un fichier horaire.txt existe déjà dans le répertoire.\nSupprimez-le si vous voulez en faire un nouveau.[/bold grey30]")
+		return
+	else:
+		while True:
+			try:
+				print("\n[bold]Voulez-vous créer le fichier modèle avec les périodes (oui/non)[/bold] ?")
+				creation_fichier = input("> ").strip().lower()
+				if creation_fichier == "oui":
+					with open("horaire.txt", "w", encoding="utf-8") as f:
+						f.write("""Jour 1: Période 1, Période 2, Période 3, Période 4
+Jour 2: Période 1, Période 2, Période 3, Période 4
+Jour 3: Période 1, Période 2, Période 3, Période 4
+Jour 4: Période 1, Période 2, Période 3, Période 4
+Jour 5: Période 1, Période 2, Période 3, Période 4
+Jour 6: Période 1, Période 2, Période 3, Période 4
+Jour 7: Période 1, Période 2, Période 3, Période 4
+Jour 8: Période 1, Période 2, Période 3, Période 4
+Jour 9: Période 1, Période 2, Période 3, Période 4
+""")
+					return
+				elif creation_fichier == "non":
+					return
+				else:
+					print("\n[bold red]Réponse invalide. Veuillez entrer oui ou non.[/bold red]\n")
+			except KeyboardInterrupt:
+				print("\n[bold yellow]Opération annulée par l'utilisateur.[/bold yellow]")
+				exit(0)
+
 # --- Fonctions spécifiques à ICS -------------------------------------------------------------------------------------
 
 # TODO: tout commenter
