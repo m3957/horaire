@@ -4,19 +4,12 @@ Programme Python avec ces deux fonctions de paresseux:
 1. **Générateur de fichier ICS**
 	- Génère un fichier ICS importable dans une application de calendrier avec à l'intérieur les périodes pour la semaine.
 
+![Capture d'écran de l'agenda GNOME important les événements](assets/ics_import.png)
+
 2. **Copie de périodes dans l'agenda papier**
 	- Liste les périodes une à la fois pour les recopier dans l'agenda.
 
-```
-Jour 1 ───────────────────────
-  Période 1: Mathématiques
-  Période 2: Français
-  Période 3: Mathématiques
-  Période 4: Français
-
-Jour 2 ───────────────────────
-  Période 1: MATHÉMATIQUES!
-```
+![Capture d'écran du terminal](assets/terminal.png)
 
 ## Installation
 Le programme peut être téléchargé depuis [la page Releases](https://github.com/m3957/horaire/releases/latest) ou être exécuté manuellement.
