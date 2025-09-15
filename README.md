@@ -18,7 +18,7 @@ Le programme peut être téléchargé depuis [la page Releases](https://github.c
 1. Télécharger le fichier dans le bas de [la page Releases](https://github.com/m3957/horaire/releases/latest)
 2. Ouvrir le programme
 3. Ignorer les plaintes de l'anti-virus
-	- Il y a des bonnes chances que Windows chiale que le programme *pourrait* être un virus. Vu que le programme n'est pas fait par une grosse entreprise, ça se plaint.
+	- Bonnes chances que Windows chiale que le programme pourrait être un virus. Pas mon problème, même pas moi qui a fait le fichier exe, et le code est vérifiable. Mauvaise pratique? Probablement.
 4. Cliquez sur un texte "En savoir plus".
 5. Un bouton devrait apparaître permettant d'exécuter le programme quand même.
 6. Cliquez sur le bouton "Exécuter quand même", priant pour ne pas avoir un virus (lol)
@@ -40,6 +40,3 @@ pip install -r requirements.txt
 # Exécuter le programme
 python3 main.py
 ```
-
-## Usage
-Pour utiliser le programme, l'ouvrir en double-cliquant dessus ou en exécutant ``./horaire-macos`` ou ``./horaire-linux``.
