@@ -1,5 +1,6 @@
 from rich import print
 from yapper import Yapper, PiperSpeaker, PiperVoiceFrance
+import sys
 
 # --- Fonctions globales, ne changent pas entre les ICS et papier -----------------------------------------------------
 def selecteur_fichiers():
@@ -40,17 +41,17 @@ Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 				pass
 			else:
 				print(message_erreur_fichier)
-				exit(0)
+				sys.exit(0)
 		else:
 			print(message_erreur_fichier)
-			exit(0)
+			sys.exit(0)
 	except KeyboardInterrupt:
-		exit(0)
+		sys.exit(0)
 	except:
 		# Indique que la sélection a été annulée, occure si l'utilisateur
 		# ferme la boîte de dialogue ou un autre problème mystérieux a été trouvé.
 		print("[bold yellow]Sélection de fichier annulée.[/bold yellow]")
-		exit(0)
+		sys.exit(0)
 
 	return nom_fichier # Retourne le nom du fichier, ex.: "horaire.txt"
 
@@ -87,7 +88,7 @@ Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 """, end='')
 		input()
 	except KeyboardInterrupt:
-		exit(0)
+		sys.exit(0)
 
 def option_jour_ecole_commencement():
 	# Modifie la valeur daycount pour une choisie par l'utilisateur,
@@ -104,7 +105,7 @@ def option_jour_ecole_commencement():
 		except ValueError:
 			print("\n[bold red]Réponse invalide. Veuillez entrer un nombre.[/bold red]\n")
 		except KeyboardInterrupt:
-			exit(0)
+			sys.exit(0)
 
 def option_creation_fichier_txt():
 	# Crée un fichier texte modèle utilisé pour le reste,
@@ -140,7 +141,7 @@ Jour 9: Période 1, Période 2, Période 3, Période 4
 					print("\n[bold red]Réponse invalide. Veuillez entrer oui ou non.[/bold red]\n")
 			except KeyboardInterrupt:
 				print("\n[bold yellow]Opération annulée par l'utilisateur.[/bold yellow]")
-				exit(0)
+				sys.exit(0)
 
 # --- Fonctions spécifiques à ICS -------------------------------------------------------------------------------------
 
@@ -170,7 +171,7 @@ def option_date_commencement_evenements():
 		except ValueError:
 			print("\n[bold red]Réponse invalide. Veuillez entrer une date dans ce format: YYYY-MM-DD.[/bold red]\n")
 		except KeyboardInterrupt:
-			exit(0)
+			sys.exit(0)
 
 def option_conges_semaine():
 	while True:
@@ -196,7 +197,7 @@ def option_conges_semaine():
 		except ValueError:
 			print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
 		except KeyboardInterrupt:
-			exit(0)
+			sys.exit(0)
 
 	return workingdays
 
@@ -257,7 +258,7 @@ def option_text_to_speech():
 			else:
 				print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]")
 	except KeyboardInterrupt:
-		exit(0)
+		sys.exit(0)
 
 def initialisation_text_to_speech(text_to_speech):
 	# Initialise les trucs de yapper
@@ -286,7 +287,7 @@ def continuation_progr_av_stage_final():
 		input()
 	except KeyboardInterrupt:
 		print("\n[bold yellow]Programme quitté.[/bold yellow]")
-		exit(0)
+		sys.exit(0)
 
 def affichage_periodes(schedule, daycount, text_to_speech):
 	import random
@@ -335,4 +336,4 @@ def affichage_periodes(schedule, daycount, text_to_speech):
 				yapper.yap(f"{schedule[daycount][periodcount - 1]}")
 
 	except KeyboardInterrupt:
-		exit(0)
+		sys.exit(0)

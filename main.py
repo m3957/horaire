@@ -3,6 +3,7 @@
 from rich import print
 from platform import system
 import functions
+import sys
 
 # Programme de générateur de fichier ICS
 def generateur_de_fichier_ics():
@@ -68,14 +69,14 @@ Veuillez sélectionner une option (1 ou 2):
 			selection_utilisateur_menu = int(input("> "))
 			if selection_utilisateur_menu == 1:
 				generateur_de_fichier_ics()
-				exit(0)
+				sys.exit(0)
 			elif selection_utilisateur_menu == 2:
 				papier()
-				exit(0)
+				sys.exit(0)
 			else:
 				print("\n[bold red]Réponse invalide. Veuillez répondre par 1 ou 2.[/bold red]\n")
 		except KeyboardInterrupt:
-			exit(0)
+			sys.exit(0)
 
 if __name__ == "__main__":
 	option_menu_principal()
