@@ -202,7 +202,7 @@ def option_conges_semaine():
 	return workingdays
 
 def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, daycount):
-	from icalendar import Calendar, Event
+	from icalendar import Calendar, Event, Alarm
 	from datetime import datetime, timedelta
 
 	# Définit cal - variable sur laquelle on va travailler
@@ -211,13 +211,27 @@ def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, day
 	for i in range(1, 5+1):
 		if i in workingdays:
 			for index, eventcounter in enumerate(schedule[scheduledaycount], start=1):
-				e = Event() # Définit e
+				event = Event() # Définit event
 				start_time = datetime.strptime(time_periods[index]["start"], "%H:%M").time() # Note la date de début
 				end_time = datetime.strptime(time_periods[index]["end"], "%H:%M").time() # Note la date de fin
-				e.add('summary', schedule[scheduledaycount][index-1]) # Ajoute le nom de l'événement
-				e.add('dtstart', datetime.combine(daycount, start_time)) # Ajoute la date de début
-				e.add('dtend', datetime.combine(daycount, end_time)) # Ajoute la date de fin
-				cal.add_component(e) # FIN
+				event.add('summary', schedule[scheduledaycount][index-1]) # Ajoute le nom de l'événement
+				event.add('dtstart', datetime.combine(daycount, start_time)) # Ajoute la date de début
+				event.add('dtend', datetime.combine(daycount, end_time)) # Ajoute la date de fin
+
+				# Alarme pour les événements "Édauction physique"
+				# TODO: faire une vraie fonctionnalité configurable
+				if schedule[scheduledaycount][index-1] == "Éducation physique":
+					alarm = Alarm()
+					alarm.add('action', 'DISPLAY')
+					alarm.add('description', 'Reminder: Éducation physique')
+					# Set alarm trigger for 8:00 AM on the same day
+					alarm_time = datetime.combine(daycount, datetime.strptime("08:00", "%H:%M").time())
+					event_start = datetime.combine(daycount, start_time)
+					trigger_delta = alarm_time - event_start
+					alarm.add('trigger', trigger_delta)
+					event.add_component(alarm)
+
+				cal.add_component(event) # FIN
 
 			# Compteur de journées d'école
 			if scheduledaycount >= 9:
