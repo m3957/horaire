@@ -1,4 +1,6 @@
 # Horaire
+[![Static Badge](https://img.shields.io/badge/T%C3%A9l%C3%A9chargements-Windows%2C%20macOS%2C%20Linux-blue?logo=github&link=https%3A%2F%2Fgithub.com%2Fm3957%2Fhoraire%2Freleases%2Flatest)](https://github.com/m3957/horaire/releases/latest)
+
 Programme Python avec ces deux fonctions de paresseux:
 
 1. **Générateur de fichier ICS**
