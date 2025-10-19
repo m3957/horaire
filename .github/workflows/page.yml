@@ -1,0 +1,36 @@
+name: Deploy README as GitHub Page
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: |
+          npm install -g showdown
+          showdown makehtml -i README.md -o README.html
+          curl -s https://github-readme-to-html.netlify.app/github-markdown-css.css -o github-markdown.css
+          echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>README</title><style>' > index.html
+          cat github-markdown.css >> index.html
+          echo '</style></head><body class="markdown-body">' >> index.html
+          cat README.html >> index.html
+          echo '</body></html>' >> index.html
+
+      - run: mkdir -p dist && mv index.html dist/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - uses: actions/deploy-pages@v4
+        id: deployment
