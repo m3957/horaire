@@ -4,6 +4,7 @@ from rich import print
 from platform import system
 import functions
 import sys
+from datetime import date
 
 # Programme de générateur de fichier ICS
 def generateur_de_fichier_ics():
@@ -23,7 +24,7 @@ def generateur_de_fichier_ics():
 	functions.avertissement_responsabilite()								# Imprime l'avertissement de responsabilité
 
 	scheduledaycount = functions.option_jour_ecole_commencement()			# Option: jour d'école de commencement (1 - 9)
-	daycount = functions.option_date_commencement_evenements()				# Option: date de commencement des événements
+	daycount: date = functions.option_date_commencement_evenements()				# Option: date de commencement des événements
 	workingdays = functions.option_conges_semaine()							# Option: congés/pédagogiques dans la semaine
 
 	functions.information_creation_fichier_ics()							# Informe l'utilisateur que le fichier va être créé
