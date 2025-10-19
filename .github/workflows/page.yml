@@ -1,36 +1,72 @@
-name: Deploy README as GitHub Page
+name: Déployer le README sur GitHub Pages
 
 on:
+  # Exécuter ce workflow à chaque push sur la branche principale
+  # si des fichiers .md ou des fichiers dans le dossier assets sont modifiés
   push:
     branches:
       - main
+    paths:
+      - "**.md"
+      - "assets/**"
+  # Permet d'exécuter ce workflow manuellement depuis l'onglet Actions
+  workflow_dispatch:
+
+# Définit les permissions du GITHUB_TOKEN pour autoriser le déploiement sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Autorise un seul déploiement concurrent, en annulant les exécutions en file d'attente
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout du code
+        uses: actions/checkout@v4
 
-      - run: |
-          npm install -g showdown
-          showdown makehtml -i README.md -o README.html
-          curl -s https://github-readme-to-html.netlify.app/github-markdown-css.css -o github-markdown.css
-          echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>README</title><style>' > index.html
-          cat github-markdown.css >> index.html
-          echo '</style></head><body class="markdown-body">' >> index.html
-          cat README.html >> index.html
-          echo '</body></html>' >> index.html
-
-      - run: mkdir -p dist && mv index.html dist/
-
-      - uses: actions/upload-pages-artifact@v3
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
         with:
-          path: dist
+          node-version: "20"
+          cache: "npm"
 
-      - uses: actions/deploy-pages@v4
+      - name: Générer le HTML et désactiver Jekyll
+        run: |
+          # Télécharger le script de conversion et sa feuille de style
+          curl -O https://raw.githubusercontent.com/krausefx/markdown-to-html-github-style/master/convert.js
+          curl -O https://raw.githubusercontent.com/krausefx/markdown-to-html-github-style/master/style.css
+
+          # Installer la dépendance du script (showdown)
+          npm install showdown
+
+          # Exécuter le script de conversion. Il lit README.md et crée README.html
+          node convert.js "Horaire"
+
+          # Renommer le fichier de sortie en index.html pour GitHub Pages
+          mv README.html index.html
+
+          # Créer un fichier .nojekyll pour désactiver le traitement par Jekyll
+          touch .nojekyll
+
+      - name: Configuration de GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Téléverser l'artefact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Téléverser le répertoire courant, qui contient maintenant
+          # index.html, .nojekyll, et le dossier assets.
+          path: "."
+
+      - name: Déploiement sur GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4
