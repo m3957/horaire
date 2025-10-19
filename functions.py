@@ -211,7 +211,7 @@ def generate_ics_file(workingdays: list[int], schedule: dict[int, list[str]], sc
 
 	for i in range(1, 5+1):
 		if i in workingdays:
-			for index, eventcounter in enumerate(schedule[scheduledaycount], start=1):
+			for index, _ in enumerate(schedule[scheduledaycount], start=1):
 				event = Event() # Définit event
 				start_time = datetime.strptime(time_periods[index]["start"], "%H:%M").time() # Note la date de début
 				end_time = datetime.strptime(time_periods[index]["end"], "%H:%M").time() # Note la date de fin
