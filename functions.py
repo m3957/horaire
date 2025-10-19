@@ -1,6 +1,7 @@
 from rich import print
-from yapper import Yapper, PiperSpeaker, PiperVoiceFrance
+from yapper import Yapper, PiperSpeaker, PiperVoiceFrance  # pyright: ignore[reportMissingTypeStubs]
 import sys
+from datetime import date
 
 # --- Fonctions globales, ne changent pas entre les ICS et papier -----------------------------------------------------
 def selecteur_fichiers():
@@ -28,7 +29,7 @@ Jour 9: Période 1, Période 2, Période 3, Période 4
 [bold]Veuillez sélectionner le fichier d'horaire.[/bold]
 Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 """, end='')
-		input()
+		input()  # pyright: ignore[reportUnusedCallResult]
 
 		nom_fichier = filedialog.askopenfilename(filetypes=[("Fichiers textes", "*.txt")]) # Ouvre le sélecteur de fichiers
 
@@ -55,15 +56,15 @@ Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 
 	return nom_fichier # Retourne le nom du fichier, ex.: "horaire.txt"
 
-def convert_txt_file_to_schedule(nom_fichier):
+def convert_txt_file_to_schedule(nom_fichier: str) -> dict[int, list[str]]:
 	# Convertit le fichier texte sélectionné avec selecteur_fichiers()
 	# en dictionnaire schedule utilisable par le reste des fonctions
 
-	schedule = {} # Initie le dictionnaire schedule
+	schedule: dict[int, list[str]] = {} # Initie le dictionnaire schedule
 
 	# Trucs faits par IA, désolé, j'y comprends pas grand chose
 	# Moi <- vrai pro de la langue du serpent (HMM)
-	with open(nom_fichier or "", "r", encoding="utf-8") as f:
+	with open(nom_fichier, "r", encoding="utf-8") as f:
 		for line in f:
 			line = line.strip()
 			if not line:
@@ -86,7 +87,7 @@ peut contenir des erreurs non présentes dans la version papier.[/bold yellow]
 
 Appuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.
 """, end='')
-		input()
+		_ = input()
 	except KeyboardInterrupt:
 		sys.exit(0)
 
@@ -124,7 +125,7 @@ def option_creation_fichier_txt():
 				creation_fichier = input("> ").strip().lower()
 				if creation_fichier == "oui":
 					with open("horaire.txt", "w", encoding="utf-8") as f:
-						f.write("""Jour 1: Période 1, Période 2, Période 3, Période 4
+						_ = f.write("""Jour 1: Période 1, Période 2, Période 3, Période 4
 Jour 2: Période 1, Période 2, Période 3, Période 4
 Jour 3: Période 1, Période 2, Période 3, Période 4
 Jour 4: Période 1, Période 2, Période 3, Période 4
@@ -157,7 +158,7 @@ def information_fichier_ics_cree():
 dans votre application de calendrier existante.[bold green]""")
 
 
-def option_date_commencement_evenements():
+def option_date_commencement_evenements() -> date:
 	# Modifie la valeur de date de commencement pour une choisie par l'utilisateur,
 	# pour commencer la création des événements dans le fichier ICS par cette date
 
@@ -201,7 +202,7 @@ def option_conges_semaine():
 
 	return workingdays
 
-def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, daycount):
+def generate_ics_file(workingdays: list[int], schedule: dict[int, list[str]], scheduledaycount: int, time_periods: dict[int, dict[str, str]], daycount: date) -> None:
 	from icalendar import Calendar, Event
 	from datetime import datetime, timedelta
 
@@ -210,7 +211,7 @@ def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, day
 
 	for i in range(1, 5+1):
 		if i in workingdays:
-			for index, eventcounter in enumerate(schedule[scheduledaycount], start=1):
+			for index, _ in enumerate(schedule[scheduledaycount], start=1):
 				e = Event() # Définit e
 				start_time = datetime.strptime(time_periods[index]["start"], "%H:%M").time() # Note la date de début
 				end_time = datetime.strptime(time_periods[index]["end"], "%H:%M").time() # Note la date de fin
@@ -231,7 +232,7 @@ def generate_ics_file(workingdays, schedule, scheduledaycount, time_periods, day
 	# Écrit le contenu dans un fichier ics
 	# TODO: mettre le fichier dans les téléchargements
 	with open('calendar.ics', 'wb') as f:
-		f.write(cal.to_ical())
+		_ = f.write(cal.to_ical())
 
 # --- Fonctions spécifiques à papier ----------------------------------------------------------------------------------
 def option_text_to_speech():
@@ -260,12 +261,12 @@ def option_text_to_speech():
 	except KeyboardInterrupt:
 		sys.exit(0)
 
-def initialisation_text_to_speech(text_to_speech):
+def initialisation_text_to_speech(text_to_speech: int):
 	# Initialise les trucs de yapper
 
 	speaker = PiperSpeaker(
 		# TODO: Régler l'erreur (même si elle n'affecte rien au runtime)
-		voice=PiperVoiceFrance.TOM
+		voice=PiperVoiceFrance.TOM  # pyright: ignore[reportArgumentType]
 	)
 
 	global yapper
@@ -284,12 +285,12 @@ def continuation_progr_av_stage_final():
 	print("\nAppuyez sur [bold]󰌑 Entrée[/ bold] pour continuer.")
 
 	try:
-		input()
+		input()  # pyright: ignore[reportUnusedCallResult]
 	except KeyboardInterrupt:
 		print("\n[bold yellow]Programme quitté.[/bold yellow]")
 		sys.exit(0)
 
-def affichage_periodes(schedule, daycount, text_to_speech):
+def affichage_periodes(schedule: dict[int, list[str]], daycount: int, text_to_speech: int) -> None:
 	import random
 	periodcount = 0 # Variable de compteur
 
@@ -326,7 +327,7 @@ def affichage_periodes(schedule, daycount, text_to_speech):
 				# Si le compte de période n'est pas >= 4, augmente
 				periodcount += 1
 
-			input()
+			input() # pyright: ignore[reportUnusedCallResult]
 
 			# Imprime la période qui doit être écrite dans l'agenda
 			print(f"  Période {periodcount}: {schedule[daycount][periodcount - 1]}", end='')
