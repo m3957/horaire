@@ -33,6 +33,8 @@ def generateur_de_fichier_ics():
 								time_periods, daycount)
 
 	functions.information_fichier_ics_cree()								# Informe l'utilisateur que le fichier a été créé
+	if system() == "Linux":
+		functions.option_ouvrir_fichier_ics()								# TODO: support Windows & macOS
 
 # Programme papier.py
 def papier():

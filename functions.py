@@ -157,6 +157,24 @@ def information_fichier_ics_cree():
 	print("""\n[bold green] Un fichier ICS a été enregistré. Vous pouvez l'importer
 dans votre application de calendrier existante.[bold green]""")
 
+def option_ouvrir_fichier_ics():
+	from subprocess import run
+	while True:
+		try:
+			print("\n[bold]Voulez-vous ouvrir le fichier ICS créé[/bold] (oui/non) ?")
+			ouvrir_fichier = input("> ")
+
+			if ouvrir_fichier == "oui":
+				run(["xdg-open", "calendar.ics"])
+				break
+			elif ouvrir_fichier == "non":
+				break
+			else:
+				print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
+		except ValueError:
+			print("\n[bold red]Réponse invalide. Veuillez répondre par oui ou non.[/bold red]\n")
+		except KeyboardInterrupt:
+			sys.exit(0)
 
 def option_date_commencement_evenements() -> date:
 	# Modifie la valeur de date de commencement pour une choisie par l'utilisateur,
