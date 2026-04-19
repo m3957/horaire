@@ -116,7 +116,7 @@ def option_creation_fichier_txt():
 
 	# Vérifie si un fichier nommé "horaire.txt" existe déjà dans le répertoire de travail
 	if os.path.exists("horaire.txt"):
-		print("[bold grey30]Un fichier horaire.txt existe déjà dans le répertoire.\nSupprimez-le si vous voulez en faire un nouveau.[/bold grey30]")
+		print("\n[bold grey30]Un fichier horaire.txt existe déjà dans le répertoire.\nSupprimez-le si vous voulez en faire un nouveau.[/bold grey30]")
 		return
 	else:
 		while True:
